@@ -6,18 +6,52 @@ import { Button } from '../components/Button';
 import { CatImage } from '../components/CatImage';
 import { Country, RandomCat } from '../lib/Types.js';
 
-// type Props = Readonly<{
-//   countries: Array<Country>;
-// }>;
+
 
 
 const IndexPage: NextPage<Props> = ({ countries }: Props): ReactElement => {
-//  const [count, setCount] = useState<number>(0);
-  let [input, setInput] = useState<string>('0');
-  let [reverseInput, setReverseInput] = useState<string>('0');
-  let [index, setIndex] = useState<number>('0');
-  // const [labourHours, setLabourHours] = useState<string>('0');
   const [catImage, setCatImage] = useState<null | RandomCat>(null);
+  let [input, setInput] = useState<string>('0');
+  let [index, setIndex] = useState<number>(0);
+  let [letterPlusIndex, setPlusIndex] = useState<number>(0);
+  let [letterMinusIndex, setMinusIndex] = useState<number>(0);
+  let [letterDevideIndex, setDevideIndex] = useState<number>(0);
+  let [letterMultipleIndex, setMultipleIndex] = useState<number>(0);
+  let [inputArray, setInputArray] = useState(['']);
+
+  const findPattern = () : string => {
+    setInputArray(inputArray = input.split(''))
+    setPlusIndex(letterPlusIndex = inputArray.lastIndexOf('+'))
+    setMinusIndex(letterMinusIndex = inputArray.lastIndexOf('-'))
+    setDevideIndex(letterDevideIndex = inputArray.lastIndexOf('/'))
+    setMultipleIndex(letterMultipleIndex = inputArray.lastIndexOf('*'))
+    setIndex(index = Math.max(letterPlusIndex, letterMinusIndex, letterDevideIndex, letterMultipleIndex));
+    //インプットの一番最後にある+とか-とかの記号の位置を判別
+
+
+    //それの次の数字が0なのか、それ以後に小数点を含むのかを判別。それによって処理を変える
+    if (input === '0'){
+      return 'case1';
+      //case1は語尾の０を入力した数字に置き換える  単に０しか入力てない場合          
+      } else if (inputArray[index + 1] === '0' && input.length === index + 2){
+        return 'case1';
+        //1+0　とかの場合も語尾の0を入力した数字に置き換える 
+      }else if (index === -1 && !inputArray.includes('.')){
+        return 'case2';
+      }else if (index !== -1 && inputArray[index + 1] !== '0' && !inputArray.includes('.', index) && !input.endsWith('-') && !input.endsWith('+') && !input.endsWith('*') && !input.endsWith('/')){
+        return 'case2';      
+        //case2はそのまま語尾に入力したやつを付け加える 2+456とかの場合
+      }else if (input.endsWith('-') || input.endsWith('+') || input.endsWith('*') || input.endsWith('/')){
+        return 'case3';
+        //case3はそのまま語尾に入力したやつを付け加える、ただし +-*/ 以外.  25+5* とかの場合
+      }else if (inputArray[index + 1] === '0' && inputArray.includes('.', index)){
+        return 'case4';
+        //case4はそのまま語尾に入力したやつを付け加える、ただし .以外。   43+0. とかの場合
+      }else{
+        return 'case4'
+        //8247. とかの場合
+      }
+  }
 
   useEffect(() => {
     fetch('https://api.thecatapi.com/v1/images/search').then(async (res: Response) => {
@@ -38,12 +72,19 @@ const IndexPage: NextPage<Props> = ({ countries }: Props): ReactElement => {
             <Button
               className="py-2 bg-cyan-600 text-white rounded border border-gray-200 cursor-pointer"
               onClick={() => {
-                if (input === '0'){
-                  setInput(input = '1')
-                } else {
+                console.log(findPattern())
+                if(findPattern() === 'case1'){  
+                  setInputArray(inputArray = input.split(''))
+                  setInputArray(inputArray.splice(input.length - 1, 1, '1'))
+                  setInput(input = inputArray.join(''))
+                  console.log(input);
+                } else if (findPattern() === 'case2'){
+                  setInput(input + '1')
+                }else if (findPattern() === 'case3'){
+                  setInput(input + '1')
+                }else if (findPattern() === 'case4'){
                   setInput(input + '1')
                 }
-                console.log(input);
               }}
             >
               <span className="select-none text-xl">1</span>
@@ -52,12 +93,19 @@ const IndexPage: NextPage<Props> = ({ countries }: Props): ReactElement => {
             <Button
               className="py-2 bg-cyan-600 text-white rounded border border-gray-200 cursor-pointer"
               onClick={() => {
-                if (input === '0'){
-                  setInput(input = '2')
-                } else {
+                console.log(findPattern())
+                if(findPattern() === 'case1'){  
+                  setInputArray(inputArray = input.split(''))
+                  setInputArray(inputArray.splice(input.length - 1, 1, '2'))
+                  setInput(input = inputArray.join(''))
+                  console.log(input);
+                } else if (findPattern() === 'case2'){
+                  setInput(input + '2')
+                }else if (findPattern() === 'case3'){
+                  setInput(input + '2')
+                }else if (findPattern() === 'case4'){
                   setInput(input + '2')
                 }
-                console.log(input);
               }}
             >
               <span className="select-none text-xl">2</span>
@@ -66,12 +114,19 @@ const IndexPage: NextPage<Props> = ({ countries }: Props): ReactElement => {
             <Button
               className="py-2 bg-cyan-600 text-white rounded border border-gray-200 cursor-pointer"
               onClick={() => {
-                if (input === '0'){
-                  setInput(input = '3')
-                } else {
+                console.log(findPattern())
+                if(findPattern() === 'case1'){  
+                  setInputArray(inputArray = input.split(''))
+                  setInputArray(inputArray.splice(input.length - 1, 1, '3'))
+                  setInput(input = inputArray.join(''))
+                  console.log(input);
+                } else if (findPattern() === 'case2'){
+                  setInput(input + '3')
+                }else if (findPattern() === 'case3'){
+                  setInput(input + '3')
+                }else if (findPattern() === 'case4'){
                   setInput(input + '3')
                 }
-                console.log(input);
               }}
             >
               <span className="select-none text-xl">3</span>
@@ -80,10 +135,17 @@ const IndexPage: NextPage<Props> = ({ countries }: Props): ReactElement => {
             <Button
               className="py-2 bg-pink-500 text-white rounded border border-gray-200 cursor-pointer"
               onClick={() => {
-                console.log('input type ', typeof(input))
-                if (input === '0'){
-                  setInput(input = '0')
-                } else if (!input.endsWith('-') && !input.endsWith('+') && !input.endsWith('*') && !input.endsWith('/') && !input.endsWith('.')) {
+                console.log(findPattern())
+                if(findPattern() === 'case1'){  
+                  setInputArray(inputArray = input.split(''))
+                  setInputArray(inputArray.splice(input.length - 1, 1, '/'))
+                  setInput(input = inputArray.join(''))
+                  console.log(input);
+                } else if (findPattern() === 'case2'){
+                  setInput(input + '/')
+                }else if (findPattern() === 'case3'){
+                  console.log('there is already +-*/')
+                }else if (findPattern() === 'case4'){
                   setInput(input + '/')
                 }
               }}
@@ -94,13 +156,21 @@ const IndexPage: NextPage<Props> = ({ countries }: Props): ReactElement => {
             <Button
               className="py-2 bg-cyan-600 text-white rounded border border-gray-200 cursor-pointer"
               onClick={() => {
-                if (input === '0'){
-                  setInput(input = '4')
-                } else {
+                console.log(findPattern())
+                if(findPattern() === 'case1'){  
+                  setInputArray(inputArray = input.split(''))
+                  setInputArray(inputArray.splice(input.length - 1, 1, '4'))
+                  setInput(input = inputArray.join(''))
+                  console.log(input);
+                } else if (findPattern() === 'case2'){
+                  setInput(input + '4')
+                }else if (findPattern() === 'case3'){
+                  setInput(input + '4')
+                }else if (findPattern() === 'case4'){
                   setInput(input + '4')
                 }
-                console.log(input);
-              }}
+                }
+              }
             >
               <span className="select-none text-xl">4</span>
             </Button>
@@ -108,12 +178,19 @@ const IndexPage: NextPage<Props> = ({ countries }: Props): ReactElement => {
             <Button
               className="py-2 bg-cyan-600 text-white rounded border border-gray-200 cursor-pointer"
               onClick={() => {
-                if (input === '0'){
-                  setInput(input = '5')
-                } else {
+                console.log(findPattern())
+                if(findPattern() === 'case1'){  
+                  setInputArray(inputArray = input.split(''))
+                  setInputArray(inputArray.splice(input.length - 1, 1, '5'))
+                  setInput(input = inputArray.join(''))
+                  console.log(input);
+                } else if (findPattern() === 'case2'){
+                  setInput(input + '5')
+                }else if (findPattern() === 'case3'){
+                  setInput(input + '5')
+                }else if (findPattern() === 'case4'){
                   setInput(input + '5')
                 }
-                console.log(input);
               }}
             >
               <span className="select-none text-xl">5</span>
@@ -122,12 +199,19 @@ const IndexPage: NextPage<Props> = ({ countries }: Props): ReactElement => {
             <Button
               className="py-2 bg-cyan-600 text-white rounded border border-gray-200 cursor-pointer"
               onClick={() => {
-                if (input === '0'){
-                  setInput(input = '6')
-                } else {
+                console.log(findPattern())
+                if(findPattern() === 'case1'){  
+                  setInputArray(inputArray = input.split(''))
+                  setInputArray(inputArray.splice(input.length - 1, 1, '6'))
+                  setInput(input = inputArray.join(''))
+                  console.log(input);
+                } else if (findPattern() === 'case2'){
+                  setInput(input + '6')
+                }else if (findPattern() === 'case3'){
+                  setInput(input + '6')
+                }else if (findPattern() === 'case4'){
                   setInput(input + '6')
                 }
-                console.log(input);
               }}
             >
               <span className="select-none text-xl">6</span>
@@ -136,9 +220,17 @@ const IndexPage: NextPage<Props> = ({ countries }: Props): ReactElement => {
             <Button
               className="py-2 bg-pink-500 text-white rounded border border-gray-200 cursor-pointer"
               onClick={() => {
-                if (input === '0'){
-                  setInput(input = '0')
-                } else if (!input.endsWith('-') && !input.endsWith('+') && !input.endsWith('*') && !input.endsWith('/') && !input.endsWith('.')) {
+                console.log(findPattern())
+                if(findPattern() === 'case1'){  
+                  setInputArray(inputArray = input.split(''))
+                  setInputArray(inputArray.splice(input.length - 1, 1, '*'))
+                  setInput(input = inputArray.join(''))
+                  console.log(input);
+                } else if (findPattern() === 'case2'){
+                  setInput(input + '*')
+                }else if (findPattern() === 'case3'){
+                  console.log('there is already +-*/')
+                }else if (findPattern() === 'case4'){
                   setInput(input + '*')
                 }
               }}
@@ -149,12 +241,19 @@ const IndexPage: NextPage<Props> = ({ countries }: Props): ReactElement => {
             <Button
               className="py-2 bg-cyan-600 text-white rounded border border-gray-200 cursor-pointer"
               onClick={() => {
-                if (input === '0'){
-                  setInput(input = '7')
-                } else {
+                console.log(findPattern())
+                if(findPattern() === 'case1'){  
+                  setInputArray(inputArray = input.split(''))
+                  setInputArray(inputArray.splice(input.length - 1, 1, '7'))
+                  setInput(input = inputArray.join(''))
+                  console.log(input);
+                } else if (findPattern() === 'case2'){
+                  setInput(input + '7')
+                }else if (findPattern() === 'case3'){
+                  setInput(input + '7')
+                }else if (findPattern() === 'case4'){
                   setInput(input + '7')
                 }
-                console.log(input);
               }}
             >
               <span className="select-none text-xl">7</span>
@@ -163,12 +262,19 @@ const IndexPage: NextPage<Props> = ({ countries }: Props): ReactElement => {
             <Button
               className="py-2 bg-cyan-600 text-white rounded border border-gray-200 cursor-pointer"
               onClick={() => {
-                if (input === '0'){
-                  setInput(input = '8')
-                } else {
+               console.log(findPattern())
+                if(findPattern() === 'case1'){  
+                  setInputArray(inputArray = input.split(''))
+                  setInputArray(inputArray.splice(input.length - 1, 1, '8'))
+                  setInput(input = inputArray.join(''))
+                  console.log(input);
+                } else if (findPattern() === 'case2'){
+                  setInput(input + '8')
+                }else if (findPattern() === 'case3'){
+                  setInput(input + '8')
+                }else if (findPattern() === 'case4'){
                   setInput(input + '8')
                 }
-                console.log(input);
               }}
             >
               <span className="select-none text-xl">8</span>
@@ -177,12 +283,19 @@ const IndexPage: NextPage<Props> = ({ countries }: Props): ReactElement => {
             <Button
               className="py-2 bg-cyan-600 text-white rounded border border-gray-200 cursor-pointer"
               onClick={() => {
-                if (input === '0'){
-                  setInput(input = '9')
-                } else {
+                console.log(findPattern())
+                if(findPattern() === 'case1'){  
+                  setInputArray(inputArray = input.split(''))
+                  setInputArray(inputArray.splice(input.length - 1, 1, '9'))
+                  setInput(input = inputArray.join(''))
+                  console.log(input);
+                } else if (findPattern() === 'case2'){
+                  setInput(input + '9')
+                }else if (findPattern() === 'case3'){
+                  setInput(input + '9')
+                }else if (findPattern() === 'case4'){
                   setInput(input + '9')
                 }
-                console.log(input);
               }}
             >
               <span className="select-none text-xl">9</span>
@@ -191,9 +304,17 @@ const IndexPage: NextPage<Props> = ({ countries }: Props): ReactElement => {
             <Button
               className="py-2 bg-pink-500 text-white rounded border border-gray-200 cursor-pointer"
               onClick={() => {
-                if (input === '0'){
-                  setInput(input = '0')
-                } else if (!input.endsWith('-') && !input.endsWith('+') && !input.endsWith('*') && !input.endsWith('/') && !input.endsWith('.')){
+                console.log(findPattern())
+                if(findPattern() === 'case1'){  
+                  setInputArray(inputArray = input.split(''))
+                  setInputArray(inputArray.splice(input.length - 1, 1, '+'))
+                  setInput(input = inputArray.join(''))
+                  console.log(input);
+                } else if (findPattern() === 'case2'){
+                  setInput(input + '+')
+                }else if (findPattern() === 'case3'){
+                  console.log('there is already +-*/')
+                }else if (findPattern() === 'case4'){
                   setInput(input + '+')
                 }
               }}
@@ -201,41 +322,20 @@ const IndexPage: NextPage<Props> = ({ countries }: Props): ReactElement => {
               <span className="select-none text-xl">+</span>
             </Button>
 
-            
-
             <Button
               className="py-2 bg-cyan-600 text-white rounded border border-gray-200 cursor-pointer"
               onClick={() => {
-                if (!input.endsWith('-') && !input.endsWith('+') && !input.endsWith('*') && !input.endsWith('/') && !input.endsWith('.')) {
-                  setReverseInput(reverseInput = input.split('').reverse().join(''))
-                  setIndex(index = reverseInput.indexOf('+'))
-                  console.log(index)
-                  console.log(reverseInput)
-                  if (!input.includes('.', input.length - index - 1)){
-                    setReverseInput(reverseInput = input.split('').reverse().join(''))
-                    setIndex(index = reverseInput.indexOf('-'))
-                    if (!input.includes('.', input.length - index - 1)){
-                    }
-                  }
-                    if (!input.includes('.', input.length - index - 1)){
-                      setReverseInput(reverseInput = input.split('').reverse().join(''))
-                      setIndex(index = reverseInput.indexOf('*'))
-                      if (!input.includes('.', input.length - index - 1)){
-                       
-                      }
-                    }
-                      if (!input.includes('.', input.length - index - 1)){
-                        setReverseInput(reverseInput = input.split('').reverse().join(''))
-                        setIndex(index = reverseInput.indexOf('/'))
-                        if (!input.includes('.', input.length - index - 1)){
-                          if(!input.includes('.')){
-                          setInput(input + '.')
-                          }
-                        }
-                      }
+                 console.log(findPattern())
+                if(findPattern() === 'case1'){  
+                  setInput(input + '.')
+                } else if (findPattern() === 'case2'){
+                  setInput(input + '.')
+                }else if (findPattern() === 'case3'){
+                  console.log('there is already .')
+                }else if (findPattern() === 'case4'){
+                  console.log('there is already .')
                 }
-                console.log(input);
-              }}
+            }}
             >
               
               <span className="select-none text-xl">.</span>
@@ -244,12 +344,19 @@ const IndexPage: NextPage<Props> = ({ countries }: Props): ReactElement => {
             <Button
               className="py-2 bg-cyan-600 text-white rounded border border-gray-200 cursor-pointer"
               onClick={() => {
-                if (input === '0'){
-                  setInput(input = '0')
-                } else {
+               console.log(findPattern())
+                if(findPattern() === 'case1'){  
+                  setInputArray(inputArray = input.split(''))
+                  setInputArray(inputArray.splice(input.length - 1, 1, '0'))
+                  setInput(input = inputArray.join(''))
+                  console.log(input);
+                } else if (findPattern() === 'case2'){
+                  setInput(input + '0')
+                }else if (findPattern() === 'case3'){
+                  setInput(input + '0')
+                }else if (findPattern() === 'case4'){
                   setInput(input + '0')
                 }
-                console.log(input);
               }}
             >
               <span className="select-none text-xl">0</span>
@@ -273,9 +380,17 @@ const IndexPage: NextPage<Props> = ({ countries }: Props): ReactElement => {
             <Button
               className="py-2 bg-pink-500 text-white rounded border border-gray-200 cursor-pointer"
               onClick={() => {
-                if (input === '0'){
-                  setInput(input = '-')
-                } else if (!input.endsWith('-') && !input.endsWith('+') && !input.endsWith('*') && !input.endsWith('/') && !input.endsWith('.')){
+               console.log(findPattern())
+                if(findPattern() === 'case1'){  
+                  setInputArray(inputArray = input.split(''))
+                  setInputArray(inputArray.splice(input.length - 1, 1, '-'))
+                  setInput(input = inputArray.join(''))
+                  console.log(input);
+                } else if (findPattern() === 'case2'){
+                  setInput(input + '-')
+                }else if (findPattern() === 'case3'){
+                  console.log('there is already +-*/')
+                }else if (findPattern() === 'case4'){
                   setInput(input + '-')
                 }
               }}
@@ -298,77 +413,7 @@ const IndexPage: NextPage<Props> = ({ countries }: Props): ReactElement => {
           </div>
         </div>
       </div>
-      {/* <div className="m-10 p-4 w-2/3 mx-auto shadow-lg border-2 rounded-2xl">
-        <div className="mx-auto">
-          <div className="grid grid-cols-3 gap-2">
-            <span className="text-gray-800 text-lg">勤務開始時間</span>
-            <span className="text-gray-800 text-lg">勤務終了時間</span>
-            <span className="text-gray-800 text-lg">労働時間</span>
-            <input
-              className="py-2 px-3 border-2 rounded border-gray-200 cursor-text"
-              type="text"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                console.log(e.target.value);
-
-                setLabourHours(e.target.value);
-              }}
-            />
-            <input
-              className="py-2 px-3 border-2 rounded border-gray-200 cursor-text"
-              type="text"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                console.log(e.target.value);
-
-                setLabourHours(e.target.value);
-              }}
-            />
-            <span className="select-none text-xl font-mono text-gray-700 text-right">{labourHours}</span>
-          </div>
-        </div>
-      </div> */}
-      {/* <div className="m-10 p-4 w-2/3 mx-auto shadow-lg border-2 rounded-2xl">
-        <ul className="list-none">
-          {countries.map((country: Country) => {
-            return (
-              <li key={country.alpha2} className="text-gray-800 even:bg-teal-100 text-lg">
-                <div className="my-1">{country.jpnName}</div>
-                <div className="my-1">{country.engName}</div>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-      <div className="m-10 p-4 w-2/3 mx-auto shadow-lg border-2 rounded-2xl">
-        フォームで使いそうなもの
-        <ul className="list-none">
-          <li className="text-gray-800 even:bg-teal-100 text-lg">
-            <input
-              className="py-2 px-3 border-2 rounded border-gray-200 cursor-text"
-              type="text"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                console.log(e.target.value);
-
-                setLabourHours(e.target.value);
-              }}
-              placeholder="テキストボックスです"
-            />
-          </li>
-          <li>
-            <select
-              className="cursor-pointer border rounded py-3 px-4"
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                console.log(e.target.value);
-              }}
-              value={0}
-            >
-              <option value={0}>選択してください</option>
-              <option value={1}>選択肢1</option>
-              <option value={2}>選択肢2</option>
-              <option value={3}>選択肢3</option>
-            </select>
-          </li>
-        </ul>
-      </div> */}
+     
       <div className="m-10 p-4 w-2/3 mx-auto shadow-lg border-2 rounded-2xl">
         <CatImage cat={catImage} />
       </div>
