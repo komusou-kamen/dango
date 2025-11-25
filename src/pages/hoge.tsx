@@ -237,6 +237,7 @@ const IndexPage: NextPage<Props> = ({ countries }: Props): ReactElement => {
                 console.log(input);
               }}
             >
+              
               <span className="select-none text-xl">.</span>
             </Button>
 
